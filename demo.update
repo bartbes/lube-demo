@@ -1,0 +1,34 @@
+version = 1
+host = "github.com"
+dir = "/bartbes/lube-demo/blob/bffce2073652be3e23c7b2eaceaf63985ecbfa1f/"
+dirs = { "LUBE-IRC", "LUBE-X", "NetPong-AIServer", "NetPong-Client", "NetPong-Server" }
+changedFiles[1] = { 
+	"LICENSE",
+	"main.orig.lua", 
+	"game.orig.conf", 
+	"LUBE-IRC/IRC.lua", 
+	"LUBE-IRC/game.conf", 
+	"LUBE-IRC/main.lua", 
+	"LUBE-X/Client.lua", 
+	"LUBE-X/Server.lua", 
+	"LUBE-X/clnt.lua", 
+	"LUBE-X/game.conf",
+	"LUBE-X/main.lua",
+	"LUBE-X/serv.lua",
+	"NetPong-AIServer/Binary.lua",
+	"NetPong-AIServer/Server.lua",
+	"NetPong-AIServer/ai.lua",
+	"NetPong-AIServer/aiconsole.lua",
+	"NetPong-AIServer/game.conf",
+	"NetPong-AIServer/main.lua",
+	"NetPong-Client/Binary.lua",
+        "NetPong-Client/Client.lua",
+        "NetPong-Client/ball.png",
+        "NetPong-Client/game.conf",
+        "NetPong-Client/main.lua",
+        "NetPong-Client/player.png",
+        "NetPong-Server/Binary.lua",
+        "NetPong-Server/Server.lua",
+        "NetPong-Server/game.conf",
+        "NetPong-Server/main.lua"
+}
