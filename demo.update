@@ -1,6 +1,6 @@
-version = 1
+version = 2
 host = "github.com"
-dir = "/bartbes/lube-demo/raw/64a2746a81fb3f2278e240aff64ceac584e62ed1/"
+dir = "/bartbes/lube-demo/raw/055ed699e347c0975d40c7fa98149d6de14b5e57/"
 dirs = { "LUBE-IRC", "LUBE-X", "NetPong-AIServer", "NetPong-Client", "NetPong-Server" }
 changedFiles[1] = { 
 	"LICENSE",
@@ -32,3 +32,9 @@ changedFiles[1] = {
         "NetPong-Server/game.conf",
         "NetPong-Server/main.lua"
 }
+
+changedFiles[2] = {
+	"LUBE-IRC/Client.lua",
+	"LUBE-IRC/IRC.lua"
+}
+
