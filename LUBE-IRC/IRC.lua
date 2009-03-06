@@ -298,17 +298,13 @@ end
 function IRC:executeInput()
 	local functionOut = ""
 	
-	self:print("> " .. self.inputField)
+	self:print("[" .. os.date("%R") .. "]> " .. self.inputField)
 	
 	if self.inputField:sub(1,1) == "/" then
 		client:send(self.inputField:sub(2))
 	elseif self.inputField:sub(1,1) == "@" then
-		local it = string.gmatch(self.inputField:sub(2), "[^ ]+")
-		client:send("PRIVMSG " .. it() .. " :" .. self.inputField)
-	elseif self.inputField:gfind("([^ ]*)")() == "/nick" then
-		client:send("NICK " .. self.inputField:gfind("[^ ]* (.*)")())
-	elseif self.inputField:gfind("([^ ]*)")() == "/quit" then
-		client:shutdown()
+		local target, text = self.inputField:sub(2):gfind("([^ ]*) (.*)")()
+		client:send("PRIVMSG " .. target .. " :" .. text)
 	elseif self.inputField:sub(1,1) == "?" then
 		client:send("PRIVMSG " .. self.supportchannel .. " :" .. self.inputField:sub(2))
 	else
@@ -462,17 +458,19 @@ function IRC.commands.NOTICE(self, sender, t, data)
 end
 
 IRC.commands["376"] = function (self, sender, recv, motd)
-	self:print(motd)
 	client:send("JOIN " .. self.supportchannel)
 	client:send("JOIN " .. self.channel)
 end
 
+IRC.commands["366"] = function (self, sender, name, channel)
+	self:print("In channel: " .. channel)
+end
+
 function IRC.commands.PRIVMSG(self, sender, recv, data)
-	self:print(self:extractuser(sender) .. "> " .. data)
+	self:print("[" .. os.date("%R") .. "]" .. recv .. ": " .. self:extractuser(sender) .. "> " .. data)
 end
 
 function IRC.commands.PING(self, sender, id)
-	print("PING-PONG")
 	client:send("PONG :" .. id)
 end
 

@@ -4,7 +4,7 @@ g_console = {}
 
 love.filesystem.require("IRC.lua")
 
-g_printText = "Change me, I dare you"
+g_printText = "Press Tab to enjoy the wonders of IRC\n\nTo change nick: /nick <nickname>\nTo quit: /quit\nPrivate message: @<user> <message>"
 
 -- console keys:
 -- Page up/down: scroll the output a bit
@@ -14,7 +14,7 @@ function load()
 	-- New console, please
 	g_console = IRC:new()
 	
-	love.graphics.setCaption("Example")
+	love.graphics.setCaption("LUBE-IRC")
 	curFont = love.graphics.newFont(love.default_font, 12)
 	love.graphics.setFont(curFont)
 	
