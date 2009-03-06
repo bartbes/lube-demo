@@ -1,4 +1,4 @@
-require("LUBE.Client")
+love.filesystem.require("Client.lua")
 
 -- IRC.lua
 -- A fairly simple console
@@ -13,6 +13,7 @@ IRC.host = "irc.freenode.net"
 IRC.port = 6667
 IRC.channel = "#loveclub"
 IRC.supportchannel = "##loveclub"
+math.randomseed(os.time())
 IRC.nick = "LUBE-USER" .. math.random(10000, 99999)
 
 function IRC:new(consoleHeight)
