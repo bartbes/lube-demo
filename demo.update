@@ -39,7 +39,7 @@ changedFiles[2] = {
 }
 
 changedFiles[3] = {
-	"LUBE-IRC/Client.lua",
+	"LUBE-IRC/main.lua",
 	"LUBE-IRC/IRC.lua"
 }
 
