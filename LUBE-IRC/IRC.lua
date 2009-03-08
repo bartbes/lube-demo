@@ -18,13 +18,13 @@ IRC.nick = "LUBE-USER" .. math.random(10000, 99999)
 
 function IRC:new(consoleHeight)
  	-- defaults to 200px height
-	consoleHeight = consoleHeight or 200
+	consoleHeight = consoleHeight or 600
 	
 	newIRC = { height = consoleHeight, 
 					width = 0, 				-- set in IRC:init
 					textHeight = 0, 		-- set in IRC:init
 					show = false,
-					toggleKey = love.key_tab, 	-- backquote == tilde key (~)
+					toggleKey = 5000, 	-- backquote == tilde key (~)
 					curY = 0,
 					numHistory = 20,		-- number of lines to keep above display
 					textLines = {},
@@ -39,7 +39,8 @@ function IRC:new(consoleHeight)
 					repeatKey = 0, 			-- for repeating some keys (cheap method)
 					repeatKeyTime = 0,
 					-- set backImage to nil if you don't want one to be drawn
-					backImage = love.graphics.newImage(love.default_logo_256)
+					backImage = love.graphics.newImage(love.default_logo_256),
+					userlist = {}
 				}
 	
 	return setmetatable(newIRC, IRC_mt)
@@ -48,9 +49,11 @@ end
 IRC_mt.__index = IRC
 
 -- Call this after you've setup the font and window
-function IRC:init()
+function IRC:init(width)
 	self.textHeight = love.graphics.getFont():getHeight()+love.graphics.getFont():getLineHeight()
 	self.width = love.graphics.getWidth()
+	self.chatwidth = self.width * 3/4
+	self.userwidth = self.width * 1/4
 	self:print("--")
 	client:Init("tcp")
 	local t = {}
@@ -92,6 +95,15 @@ function IRC:draw()
 		lineNum = lineNum + 1
 	end
 	
+
+	-- Draw the users
+	
+	for i, v in ipairs(self.userlist) do
+		love.graphics.draw(v, self.chatwidth + 5, self.curY - self.textHeight*i-4)
+	end
+
+	love.graphics.line(self.chatwidth, 0, self.chatwidth, self.curY-self.textHeight-2)
+
 	-- Draw the input field
 	love.graphics.line(0, self.curY-self.textHeight-2, self.width, self.curY-self.textHeight-2)
 	love.graphics.draw(self.inputField, 5, self.curY - self.textHeight/2+self.textHeight*0.2)
@@ -397,7 +409,7 @@ function IRC:print(...)
 	end
 	
 	-- split the line if it's too big (only in half)
-	if love.graphics.getFont():getWidth(text) > self.width then
+	if love.graphics.getFont():getWidth(text) > self.chatwidth then
 		text = string.sub(text, 1, string.len(text)/2) .. "\n / " .. string.sub(text, string.len(text)/2+1)
 	end
 	
@@ -453,6 +465,29 @@ function IRC:extractuser(userid)
 	return t[1], t[2], t[3]
 end
 
+function IRC:removefromuserlist(user)
+	for i, v in ipairs(self.userlist) do
+		if v == user then
+			table.remove(self.userlist, i)
+			break
+		end
+	end
+end
+
+function IRC.alphabeticalsort(first, second)
+	local firstb = string.byte(first:sub(1,1))
+	local secondb = string.byte(first:sub(1,1))
+	local counter = 2
+	while firstb == secondb and firstb do
+		firstb = string.byte(first:sub(counter, counter))
+		secondb = string.byte(second:sub(counter, counter))
+		counter = counter + 1
+	end
+	if not firstb then return true end
+	if not secondb then return false end
+	return (firstb < secondb)
+end
+
 function IRC.commands.NOTICE(self, sender, t, data)
 	if not self.identified then
 		client:send("NICK " .. self.nick .. "\nUSER LUBE-IRC 8 * :LOVE LUBE IRC\n")
@@ -469,8 +504,49 @@ IRC.commands["376"] = function (self, sender, recv, motd)
 	end
 end
 
+IRC.commands["353"] = function(self, sender, name, char, channel, users)
+	if channel ~= self.channel then return end
+	self.userlist = {}
+	it = users:gfind("([^ ]*)")
+	for name in it do
+		if name ~= "" then
+			table.insert(self.userlist, name)
+		end
+	end
+	table.sort(self.userlist, function(a, b) return (a>b) end)
+end
+
+IRC.commands["JOIN"] = function(self, sender, channel)
+	if channel ~= self.channel then return end
+	local user = self:extractuser(sender)
+	table.insert(self.userlist, user)
+	table.sort(self.userlist, function(a,b) return (a>b) end)
+	self:print("User " .. user .. " joined")
+end
+
+IRC.commands["QUIT"] = function(self, sender, message)
+	local user = self:extractuser(sender)
+	self:removefromuserlist(user)
+	self:print("User " .. user .. " quit: " .. message)
+end
+
+IRC.commands["PART"] = function(self, sender, channel, message)
+	if channel ~= self.channel then return end
+	local user = self:extractuser(sender)
+	self:removefromuserlist(user)
+	self:print("User " .. user .. " quit: " .. message)
+end
+
+IRC.commands["NICK"] = function(self, sender, nick)
+	local user = self:extractuser(sender)
+	self:removefromuserlist(user)
+	table.insert(self.userlist, nick)
+	table.sort(self.userlist, function(a,b) return (a>b) end)
+	self:print("User " .. user .. " changed nick to " .. nick)
+end
+
 IRC.commands["366"] = function (self, sender, name, channel)
-	self:print("In channel: " .. channel)
+	self:print("Joined channel: " .. channel)
 end
 
 function IRC.commands.PRIVMSG(self, sender, recv, data)

@@ -24,6 +24,7 @@ function load()
 	g_console:init()
 	
 	-- Print some text
+	g_console:toggle()
 end
 
 function keypressed(key)
