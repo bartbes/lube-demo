@@ -298,7 +298,7 @@ end
 function IRC:executeInput()
 	local functionOut = ""
 	
-	self:print("[" .. os.date("%R") .. "]> " .. self.inputField)
+	self:print("[" .. os.date("%H:%M") .. "]> " .. self.inputField)
 	
 	if self.inputField:sub(1,1) == "/" then
 		client:send(self.inputField:sub(2))
@@ -474,7 +474,7 @@ IRC.commands["366"] = function (self, sender, name, channel)
 end
 
 function IRC.commands.PRIVMSG(self, sender, recv, data)
-	self:print("[" .. os.date("%R") .. "]" .. recv .. ": " .. self:extractuser(sender) .. "> " .. data)
+	self:print("[" .. os.date("%H:%M") .. "]" .. recv .. ": " .. self:extractuser(sender) .. "> " .. data)
 end
 
 function IRC.commands.PING(self, sender, id)
