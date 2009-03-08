@@ -458,7 +458,7 @@ function IRC.commands.NOTICE(self, sender, t, data)
 		client:send("NICK " .. self.nick .. "\nUSER LUBE-IRC 8 * :LOVE LUBE IRC\n")
 		self.identified = true
 	end
-	self:print("NOTICE " .. t .. ": " .. data)
+	self:print("NOTICE " .. t .. ": " .. (data or ""))
 end
 
 IRC.commands["376"] = function (self, sender, recv, motd)
