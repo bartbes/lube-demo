@@ -50,6 +50,7 @@ function update(dt)
 
 	-- Make sure you update the console
 	g_console:update(dt)
+	love.timer.sleep(10)
 end
 
 function draw()

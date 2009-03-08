@@ -454,12 +454,19 @@ function IRC:extractuser(userid)
 end
 
 function IRC.commands.NOTICE(self, sender, t, data)
-	client:send("NICK " .. self.nick .. "\nUSER LUBE-IRC 8 * :LOVE LUBE IRC\n")
+	if not self.identified then
+		client:send("NICK " .. self.nick .. "\nUSER LUBE-IRC 8 * :LOVE LUBE IRC\n")
+		self.identified = true
+	end
+	self:print("NOTICE " .. t .. ": " .. data)
 end
 
 IRC.commands["376"] = function (self, sender, recv, motd)
-	client:send("JOIN " .. self.supportchannel)
-	client:send("JOIN " .. self.channel)
+	if not self.joined then
+		client:send("JOIN " .. self.supportchannel)
+		client:send("JOIN " .. self.channel)
+		self.joined = true
+	end
 end
 
 IRC.commands["366"] = function (self, sender, name, channel)
