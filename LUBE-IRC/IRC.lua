@@ -1,4 +1,4 @@
-love.filesystem.require("Client.lua")
+love.filesystem.require("LUBE.lua")
 
 -- IRC.lua
 -- A fairly simple console
@@ -55,11 +55,11 @@ function IRC:init(width)
 	self.chatwidth = self.width * 3/4
 	self.userwidth = self.width * 1/4
 	self:print("--")
-	client:Init("tcp")
+	lube.client:Init("tcp")
 	local t = {}
 	t.self = self; t.string = string; t.table = table; t.unpack = unpack
-	client:setCallback(setfenv(self.rcvdata, t))
-	client:connect(self.host, self.port, true)
+	lube.client:setCallback(setfenv(self.rcvdata, t))
+	lube.client:connect(self.host, self.port, true)
 end
 
 -- Probably want to call this at the end of your draw function so that
@@ -115,7 +115,7 @@ end
 -- Handles animation and repeating some keys
 function IRC:update(dt)
 
-	client:update()
+	lube.client:update()
 
 	if self.show and self.curY < self.height-1 and self.animating then --and self.animDelta < self.animTime+5 then
 		local move = 0.5 * (-math.cos(self.animDelta/(self.animTime/math.pi))+1)
@@ -313,14 +313,14 @@ function IRC:executeInput()
 	self:print("[" .. os.date("%H:%M") .. "]> " .. self.inputField)
 	
 	if self.inputField:sub(1,1) == "/" then
-		client:send(self.inputField:sub(2))
+		lube.client:send(self.inputField:sub(2))
 	elseif self.inputField:sub(1,1) == "@" then
 		local target, text = self.inputField:sub(2):gfind("([^ ]*) (.*)")()
-		client:send("PRIVMSG " .. target .. " :" .. text)
+		lube.client:send("PRIVMSG " .. target .. " :" .. text)
 	elseif self.inputField:sub(1,1) == "?" then
-		client:send("PRIVMSG " .. self.supportchannel .. " :" .. self.inputField:sub(2))
+		lube.client:send("PRIVMSG " .. self.supportchannel .. " :" .. self.inputField:sub(2))
 	else
-		client:send("PRIVMSG " .. self.channel .. " :" .. self.inputField)
+		lube.client:send("PRIVMSG " .. self.channel .. " :" .. self.inputField)
 	end
 	
 	table.insert(self.inputHistory, 1, self.inputField)
@@ -490,7 +490,7 @@ end
 
 function IRC.commands.NOTICE(self, sender, t, data)
 	if not self.identified then
-		client:send("NICK " .. self.nick .. "\nUSER LUBE-IRC 8 * :LOVE LUBE IRC\n")
+		lube.client:send("NICK " .. self.nick .. "\nUSER LUBE-IRC 8 * :LOVE LUBE IRC\n")
 		self.identified = true
 	end
 	self:print("NOTICE " .. t .. ": " .. (data or ""))
@@ -498,8 +498,8 @@ end
 
 IRC.commands["376"] = function (self, sender, recv, motd)
 	if not self.joined then
-		client:send("JOIN " .. self.supportchannel)
-		client:send("JOIN " .. self.channel)
+		lube.client:send("JOIN " .. self.supportchannel)
+		lube.client:send("JOIN " .. self.channel)
 		self.joined = true
 	end
 end
@@ -554,7 +554,7 @@ function IRC.commands.PRIVMSG(self, sender, recv, data)
 end
 
 function IRC.commands.PING(self, sender, id)
-	client:send("PONG :" .. id)
+	lube.client:send("PONG :" .. id)
 end
 
 
