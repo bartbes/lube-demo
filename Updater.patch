@@ -14,3 +14,4 @@ function Updater.dialog.draw()
 	text = "During this time the screen will be black"
 	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 413)
 end
+
