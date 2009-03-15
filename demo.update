@@ -1,6 +1,7 @@
 version = 6
+description = "New version of LUBE for LUBE-IRC"
 host = "github.com"
-dir = "/bartbes/lube-demo/raw/efff4afb8d823d3a194546a5dcd217565c3cdc02"
+dir = "/bartbes/lube-demo/raw/37f697de3e7882b57c20d145c19765bd25eb657e/"
 dirs = { "LUBE-IRC", "LUBE-X", "NetPong-AIServer", "NetPong-Client", "NetPong-Server" }
 changedFiles[1] = { 
 	"LICENSE",
