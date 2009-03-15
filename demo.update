@@ -1,6 +1,6 @@
-version = 5
+version = 6
 host = "github.com"
-dir = "/bartbes/lube-demo/raw/58ee3b8ebcc3bbdce5866ea79608a2935acf0601/"
+dir = "/bartbes/lube-demo/raw/efff4afb8d823d3a194546a5dcd217565c3cdc02"
 dirs = { "LUBE-IRC", "LUBE-X", "NetPong-AIServer", "NetPong-Client", "NetPong-Server" }
 changedFiles[1] = { 
 	"LICENSE",
@@ -53,3 +53,12 @@ changedFiles[5] = {
 	"LUBE-IRC/IRC.lua"
 }
 
+changedFiles[6] = {
+	"LUBE-IRC/IRC.lua",
+	"LUBE-IRC/LUBE.lua",
+	"Updater.patch"
+}
+
+removedFiles[6] = {
+	"LUBE-IRC/Client.lua"
+}
