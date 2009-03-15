@@ -55,8 +55,7 @@ changedFiles[5] = {
 
 changedFiles[6] = {
 	"LUBE-IRC/IRC.lua",
-	"LUBE-IRC/LUBE.lua",
-	"Updater.patch"
+	"LUBE-IRC/LUBE.lua"
 }
 
 removedFiles[6] = {
