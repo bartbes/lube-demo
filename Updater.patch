@@ -1,0 +1,16 @@
+function Updater.dialog.draw()
+	local text = "Update Available"
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 280)
+	text = "Current version: " .. Updater.currentversion
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 300)
+	text = "New version: " .. Updater.versioninfo.version
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 312)
+	text = "Description: " .. (Updater.versioninfo.description[Updater.versioninfo.version] or "None")
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 325)
+	text = "[Y]es/[N]o/[S]top updating"
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 343)
+	text = "Remember: This can take a few minutes"
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 393)
+	text = "During this time the screen will be black"
+	love.graphics.draw(text, 400-Updater.font:getWidth(text)/2, 413)
+end
