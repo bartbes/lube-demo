@@ -217,7 +217,7 @@ function keyreleased(key)
 	if key == love.key_return and not (love.keyboard.isDown(love.key_lalt) or love.keyboard.isDown(love.key_ralt)) then
 		menu = not menu
 		if not menu then
-			client:connect("83.226.210.4", 8118)
+			client:connect("127.0.0.1", 8118)
 		end
 	end
 	if key == love.key_q or key == love.key_escape then
